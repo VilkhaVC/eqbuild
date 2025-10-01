@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-offense: #f97316; /* orange-500 */
+  --color-defense: #3b82f6; /* blue-500 */
+  --color-status: #14b8a6;  /* teal-500 */
+  --color-pvp: #a855f7;     /* purple-500 */
+  --color-recovery: #f59e0b;/* amber-500 */
+}

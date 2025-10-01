@@ -1,0 +1,86 @@
+{
+  "weapon": [
+    "Physical Critical Hit Chance",
+    "Magic Critical Hit Chance",
+    "Increased physical critical hit damage",
+    "Increased magic critical hit damage",
+    "Abnormal status Hit rate",
+    "Increased damage to normal monsters",
+    "Increased damage to boss monsters",
+    "PvP Damage increase"
+  ],
+  "helmet": [
+    "Physical Penetration",
+    "Magic Penetration",
+    "Max HP",
+    "Max MP",
+    "Provocation resistance rate",
+    "HP Natural Recovery",
+    "MP Natural Recovery"
+  ],
+  "top": [
+    "Reduced damage to normal monsters",
+    "Reduced damage to boss monsters",
+    "PvP Damage decrease",
+    "Max HP",
+    "Max MP",
+    "Sleep resistance",
+    "Freezing resistance"
+  ],
+  "bottom": [
+    "Physical Penetration Resistance",
+    "Magic Penetration Resistance",
+    "Max HP",
+    "Max MP",
+    "Stun resistance",
+    "Physical Critical Hit Resistance",
+    "Magic critical hit resistance"
+  ],
+  "gloves": [
+    "Physical Accuracy",
+    "Magical Accuracy",
+    "Max HP",
+    "Max MP",
+    "Silent Resistance Rate",
+    "HP Potion Increased recovery amount",
+    "MP Potion Increased recovery amount"
+  ],
+  "shoes": [
+    "Physical evasion",
+    "Magic Evasion",
+    "Max HP",
+    "Max MP",
+    "Bondage resistance",
+    "HP Potion Increased recovery amount",
+    "MP Potion Increased recovery amount"
+  ],
+  "necklace": [
+    "PvP Attack Power",
+    "PvP Defense",
+    "Physical Critical Hit Resistance",
+    "Magic critical hit resistance",
+    "Reduced MP consumption",
+    "Reduced physical critical hit damage",
+    "Reduced magic critical hit damage"
+  ],
+  "earring": [
+    "PvP Accuracy",
+    "PvP Evasion",
+    "Stun hit rate",
+    "Bond hit rate",
+    "Sleep hit rate",
+    "Freezing hit rate",
+    "Silent Hit Rate",
+    "Provocation hit rate"
+  ],
+  "ring": [
+    "PvP Accuracy",
+    "PvP Evasion",
+    "Stun resistance",
+    "Bondage resistance",
+    "Sleep resistance",
+    "Freezing resistance",
+    "Silent Resistance Rate",
+    "Provocation resistance rate"
+  ]
+}
