@@ -74,3 +74,16 @@ export const SlotIcons: Record<SlotKey, React.FC<IconProps>> = {
   earring: Earring,
   ring: Ring,
 }
+
+export const CrossedSwordsIcon: React.FC<IconProps> = (props) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M3 3l6 6" />
+    <path d="M21 3l-6 6" />
+    <path d="M3 21l6-6" />
+    <path d="M21 21l-6-6" />
+    <path d="M7 9l2-2" />
+    <path d="M17 9l-2-2" />
+    <path d="M7 15l2 2" />
+    <path d="M17 15l-2 2" />
+  </svg>
+)

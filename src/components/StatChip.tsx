@@ -16,7 +16,7 @@ export default function StatChip({ label, selected, disabled, primary, color, on
     <div className="flex items-center gap-2">
       <button
         className={[
-          'px-2 py-1 rounded-full text-xs border transition-colors flex items-center gap-1',
+          'px-3 py-1 rounded-full text-xs border transition-colors flex items-center gap-1',
           selected ? 'text-white' : 'text-slate-700',
           disabled && !selected ? 'opacity-40 cursor-not-allowed' : 'hover:opacity-90',
         ].join(' ')}
@@ -36,7 +36,7 @@ export default function StatChip({ label, selected, disabled, primary, color, on
         >
           {primary ? '★' : '☆'}
         </span>
-        <span className="truncate max-w-[12rem]">{label}</span>
+        <span className="truncate max-w-[18rem] xl:max-w-[22rem]">{label}</span>
       </button>
 
       {selected && (

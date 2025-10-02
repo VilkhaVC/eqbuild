@@ -13,6 +13,10 @@ export type SlotKey =
   | 'earring'
   | 'ring'
 
+export type AttributeKey = 'STR' | 'DEX' | 'VIT' | 'INT' | 'WIS' | 'AGI'
+export type ModeKey = 'PvP' | 'PvE' | 'Bossing' | 'Hybrid'
+export type ClassKey = 'Human' | 'Dhan' | 'Elf' | 'Half Elf' | 'Dekan'
+
 export type SlotState = {
   selected: string[]
   primary?: string
@@ -21,11 +25,17 @@ export type SlotState = {
 
 export type BuilderState = {
   slots: Record<SlotKey, SlotState>
+  attributes: Record<AttributeKey, boolean>
+  modes: Record<ModeKey, boolean>
+  selectedClass?: ClassKey
   toggleStat: (slot: SlotKey, label: string) => void
   setPrimary: (slot: SlotKey, label?: string) => void
   setColor: (slot: SlotKey, label: string, color: string) => void
   resetSlot: (slot: SlotKey) => void
   resetAll: () => void
+  toggleAttribute: (attr: AttributeKey) => void
+  toggleMode: (mode: ModeKey) => void
+  setClass: (klass?: ClassKey) => void
 }
 
 const emptySlot = (): SlotState => ({ selected: [], colors: {} })
@@ -42,10 +52,29 @@ const initialState: Record<SlotKey, SlotState> = {
   ring: emptySlot(),
 }
 
+const initialAttributes: Record<AttributeKey, boolean> = {
+  STR: false,
+  DEX: false,
+  VIT: false,
+  INT: false,
+  WIS: false,
+  AGI: false,
+}
+
+const initialModes: Record<ModeKey, boolean> = {
+  PvP: false,
+  PvE: false,
+  Bossing: false,
+  Hybrid: false,
+}
+
 export const useBuilderStore = create<BuilderState>()(
   persist(
     (set, get) => ({
       slots: initialState,
+      attributes: initialAttributes,
+      modes: initialModes,
+      selectedClass: undefined,
       toggleStat: (slot, label) => {
         const state = get()
         const slotState = state.slots[slot]
@@ -100,14 +129,25 @@ export const useBuilderStore = create<BuilderState>()(
           },
         })
       },
-      resetAll: () => set({ slots: { ...initialState } }),
+      resetAll: () => set({ slots: { ...initialState }, attributes: { ...initialAttributes }, modes: { ...initialModes } }),
+      toggleAttribute: (attr) => {
+        const state = get()
+        const cur = state.attributes[attr]
+        set({ attributes: { ...state.attributes, [attr]: !cur } })
+      },
+      toggleMode: (mode) => {
+        const state = get()
+        const cur = state.modes[mode]
+        set({ modes: { ...state.modes, [mode]: !cur } })
+      },
+      setClass: (klass) => set({ selectedClass: klass }),
     }),
     {
       name: 'rohan-eq-builder',
-      version: 2,
+      version: 6,
       migrate: (persisted: any, fromVersion) => {
         if (!persisted || !persisted.slots) return persisted
-        if (fromVersion && fromVersion >= 2) return persisted
+        if (fromVersion && fromVersion >= 6) return persisted
 
         // Gabungkan earring1 + earring2 => earring, ring1 + ring2 => ring
         const s = persisted.slots || {}
@@ -130,6 +170,9 @@ export const useBuilderStore = create<BuilderState>()(
             earring: combine(s.earring1, s.earring2),
             ring: combine(s.ring1, s.ring2),
           } as Record<SlotKey, SlotState>,
+          attributes: persisted.attributes || { ...initialAttributes },
+          modes: { ...initialModes, ...(persisted.modes || {}) },
+          selectedClass: persisted.selectedClass,
         }
         return next
       },

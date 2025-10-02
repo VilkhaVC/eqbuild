@@ -4,6 +4,7 @@ import SlotCard from './components/SlotCard'
 import slots from './data/slots.json'
 import type { SlotKey } from './store/builder'
 import StaticCard from './components/StaticCard'
+import { CrossedSwordsIcon } from './icons/SlotIcons'
 
 const layout: Array<{ key: SlotKey; title: string }> = [
   { key: 'weapon', title: 'Weapon' },
@@ -20,8 +21,11 @@ const layout: Array<{ key: SlotKey; title: string }> = [
 export default function App() {
   return (
     <div className="w-full max-w-screen-2xl mx-auto h-screen overflow-hidden px-2 py-2 flex flex-col gap-2">
-      <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Rohan EQ Builder</h1>
+      <header className="flex items-center">
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-bold">Rohan 2 EQ stats Build</h1>
+          <CrossedSwordsIcon className="w-7 h-7 text-slate-700" />
+        </div>
       </header>
 
       <Toolbar />

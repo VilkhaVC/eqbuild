@@ -11,7 +11,7 @@ export default function SlotCard({ slotKey, title, stats }: { slotKey: SlotKey; 
   const Icon = SlotIcons[slotKey]
 
   return (
-    <div className="bg-white rounded-lg shadow p-3 flex flex-col gap-3">
+    <div className="bg-white rounded-lg shadow p-3 flex flex-col gap-3 border-2 border-slate-300">
       <div className="flex items-center justify-between">
         <h3 className="font-semibold flex items-center gap-2">
           <Icon className="w-5 h-5 text-slate-600" />
