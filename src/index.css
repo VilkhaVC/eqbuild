@@ -9,3 +9,14 @@
   --color-pvp: #a855f7;     /* purple-500 */
   --color-recovery: #f59e0b;/* amber-500 */
 }
+
+/* Hide number input spinners for StatCalculator only */
+.statcalc input[type="number"]::-webkit-outer-spin-button,
+.statcalc input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.statcalc input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}

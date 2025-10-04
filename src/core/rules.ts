@@ -11,6 +11,16 @@ export const CategoryColors: Record<Category, string> = {
   Recovery: '#f59e0b',
 }
 
+// Mapping Class -> Sub-Class (sementara diketahui dari sumber resmi)
+// Referensi: https://community.withhive.com/rohan2global/en/board/15/21 (Dekan)
+export const ClassToSubclasses: Record<string, string[]> = {
+  Human: ['Guardian', 'Defender'],
+  Dhan: ['Avenger', 'Predator'],
+  Elf: ['Templar', 'Priest'],
+  'Half Elf': ['Scout', 'Ranger'],
+  Dekan: ['Dragon Sage', 'Dragon Knight'],
+}
+
 // Heuristik kategori berdasarkan nama stat (bisa disesuaikan bila ada koreksi)
 export function getStatCategory(label: string): Category {
   const l = label.toLowerCase()

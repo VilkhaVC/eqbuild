@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { MAX_OPTIONS_PER_SLOT } from '../core/rules'
+import type { Recommendation } from '../core/recommendations'
 
 export type SlotKey =
   | 'weapon'
@@ -16,6 +17,7 @@ export type SlotKey =
 export type AttributeKey = 'STR' | 'DEX' | 'VIT' | 'INT' | 'WIS' | 'AGI'
 export type ModeKey = 'PvP' | 'PvE' | 'Bossing' | 'Hybrid'
 export type ClassKey = 'Human' | 'Dhan' | 'Elf' | 'Half Elf' | 'Dekan'
+export type SubClassKey = string
 
 export type SlotState = {
   selected: string[]
@@ -28,6 +30,7 @@ export type BuilderState = {
   attributes: Record<AttributeKey, boolean>
   modes: Record<ModeKey, boolean>
   selectedClass?: ClassKey
+  selectedSubClass?: SubClassKey
   toggleStat: (slot: SlotKey, label: string) => void
   setPrimary: (slot: SlotKey, label?: string) => void
   setColor: (slot: SlotKey, label: string, color: string) => void
@@ -36,6 +39,8 @@ export type BuilderState = {
   toggleAttribute: (attr: AttributeKey) => void
   toggleMode: (mode: ModeKey) => void
   setClass: (klass?: ClassKey) => void
+  setSubClass: (sub?: SubClassKey) => void
+  applyRecommendation: (rec: Recommendation) => void
 }
 
 const emptySlot = (): SlotState => ({ selected: [], colors: {} })
@@ -75,6 +80,7 @@ export const useBuilderStore = create<BuilderState>()(
       attributes: initialAttributes,
       modes: initialModes,
       selectedClass: undefined,
+      selectedSubClass: undefined,
       toggleStat: (slot, label) => {
         const state = get()
         const slotState = state.slots[slot]
@@ -129,25 +135,54 @@ export const useBuilderStore = create<BuilderState>()(
           },
         })
       },
-      resetAll: () => set({ slots: { ...initialState }, attributes: { ...initialAttributes }, modes: { ...initialModes } }),
+      resetAll: () => set({ slots: { ...initialState }, attributes: { ...initialAttributes }, modes: { ...initialModes }, selectedClass: undefined, selectedSubClass: undefined }),
       toggleAttribute: (attr) => {
         const state = get()
         const cur = state.attributes[attr]
         set({ attributes: { ...state.attributes, [attr]: !cur } })
       },
       toggleMode: (mode) => {
-        const state = get()
-        const cur = state.modes[mode]
-        set({ modes: { ...state.modes, [mode]: !cur } })
+        // Eksklusif: aktifkan hanya mode yang dipilih, lainnya false
+        const all: ModeKey[] = ['PvP', 'PvE', 'Bossing', 'Hybrid']
+        const next = all.reduce((acc, m) => {
+          acc[m] = m === mode
+          return acc
+        }, {} as Record<ModeKey, boolean>)
+        set({ modes: next })
       },
-      setClass: (klass) => set({ selectedClass: klass }),
+      setClass: (klass) => set({ selectedClass: klass, selectedSubClass: undefined }),
+      setSubClass: (sub) => set({ selectedSubClass: sub }),
+      applyRecommendation: (rec) => {
+        const state = get()
+        // Apply attributes: ON for recommended, OFF for others
+        const attrKeys: AttributeKey[] = ['STR', 'DEX', 'VIT', 'INT', 'WIS', 'AGI']
+        const nextAttrs: Record<AttributeKey, boolean> = attrKeys.reduce((acc, k) => {
+          acc[k] = rec.attributesOn.includes(k)
+          return acc
+        }, {} as Record<AttributeKey, boolean>)
+
+        // Apply per-slot selections
+        const nextSlots: Record<SlotKey, SlotState> = { ...state.slots }
+        const entries = Object.entries(rec.perSlot) as [SlotKey, { selected: string[]; primary?: string }][]
+        for (const [slot, cfg] of entries) {
+          if (!cfg) continue
+          const prev = state.slots[slot]
+          nextSlots[slot] = {
+            ...prev,
+            selected: cfg.selected || [],
+            primary: cfg.primary,
+          }
+        }
+
+        set({ attributes: nextAttrs, slots: nextSlots })
+      },
     }),
     {
       name: 'rohan-eq-builder',
-      version: 6,
+      version: 7,
       migrate: (persisted: any, fromVersion) => {
         if (!persisted || !persisted.slots) return persisted
-        if (fromVersion && fromVersion >= 6) return persisted
+        if (fromVersion && fromVersion >= 7) return persisted
 
         // Gabungkan earring1 + earring2 => earring, ring1 + ring2 => ring
         const s = persisted.slots || {}
@@ -173,6 +208,7 @@ export const useBuilderStore = create<BuilderState>()(
           attributes: persisted.attributes || { ...initialAttributes },
           modes: { ...initialModes, ...(persisted.modes || {}) },
           selectedClass: persisted.selectedClass,
+          selectedSubClass: persisted.selectedSubClass,
         }
         return next
       },
