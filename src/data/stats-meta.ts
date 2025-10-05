@@ -4,7 +4,7 @@ import type { AttributeKey } from '../store/builder'
 // Sumber: spesifikasi yang Anda berikan.
 export const PrimaryStatEffectsDesc: Record<AttributeKey, string> = {
   STR: 'Per 1 STR: Physical Attack +2, HP Regeneration +2',
-  DEX: 'Per 1 DEX: Physical Attack +2, Physical Penetration +2',
+  DEX: 'Per 1 DEX: Physical Accuracy +2, Physical Penetration +2',
   VIT: 'Per 1 VIT: Physical Defense +2, Magical Defense +2, Max HP +40',
   INT: 'Per 1 INT: HP Regeneration +1, MP Regeneration +1, Magical Attack +2',
   WIS: 'Per 1 WIS: Magical Accuracy +2, Magical Penetration +2',
@@ -14,6 +14,7 @@ export const PrimaryStatEffectsDesc: Record<AttributeKey, string> = {
 // Kunci secondary stat yang dihitung oleh kalkulator
 export type SecondaryStatKey =
   | 'PhysicalAttack'
+  | 'PhysicalAccuracy'
   | 'HPRegen'
   | 'PhysicalPenetration'
   | 'PhysicalDefense'
@@ -28,6 +29,7 @@ export type SecondaryStatKey =
 // Label tampilan ramah untuk secondary stat
 export const SecondaryDisplayLabels: Record<SecondaryStatKey, string> = {
   PhysicalAttack: 'Physical Attack',
+  PhysicalAccuracy: 'Physical Accuracy',
   HPRegen: 'HP Regeneration',
   PhysicalPenetration: 'Physical Penetration',
   PhysicalDefense: 'Physical Defense',
@@ -49,7 +51,7 @@ export const PrimaryToSecondary: Record<AttributeKey, StatEffect[]> = {
     { to: 'HPRegen', coef: 2 },
   ],
   DEX: [
-    { to: 'PhysicalAttack', coef: 2 },
+    { to: 'PhysicalAccuracy', coef: 2 },
     { to: 'PhysicalPenetration', coef: 2 },
   ],
   VIT: [
