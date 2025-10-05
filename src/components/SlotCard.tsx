@@ -11,7 +11,7 @@ export default function SlotCard({ slotKey, title, stats }: { slotKey: SlotKey; 
   const Icon = SlotIcons[slotKey]
 
   return (
-    <div className="bg-white rounded-lg shadow p-3 flex flex-col gap-3 border-2 border-slate-300">
+    <div className="bg-white rounded-lg shadow p-3 flex flex-col gap-3 border-2 border-slate-300 min-h-[280px] h-full">
       <div className="flex items-center justify-between">
         <h3 className="font-semibold flex items-center gap-2">
           <Icon className="w-5 h-5 text-slate-600" />
@@ -45,7 +45,7 @@ export default function SlotCard({ slotKey, title, stats }: { slotKey: SlotKey; 
         })}
       </div>
 
-      <div className="pt-2">
+      <div className="mt-auto pt-2 self-start">
         <button className="text-sm text-red-600 hover:underline" onClick={() => resetSlot(slotKey)}>Reset Slot</button>
       </div>
     </div>

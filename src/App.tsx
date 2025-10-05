@@ -26,10 +26,30 @@ export default function App() {
   const [calcOpen, setCalcOpen] = React.useState(false)
   return (
     <div className="w-full max-w-screen-2xl mx-auto h-screen overflow-hidden px-2 py-2 flex flex-col gap-2">
-      <header className="flex items-center">
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold">Rohan 2 EQ stats Build</h1>
-          <CrossedSwordsIcon className="w-7 h-7 text-slate-700" />
+      <header className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-gradient-to-br from-rose-600 to-red-600 text-white shadow hover:shadow-md transition will-change-transform">
+            <CrossedSwordsIcon className="w-6 h-6" />
+          </div>
+          <div className="flex flex-col leading-tight">
+            <h1 className="text-2xl font-extrabold bg-gradient-to-r from-slate-900 via-rose-700 to-red-600 bg-clip-text text-transparent tracking-tight">
+              Rohan 2 EQ stats Build
+            </h1>
+            <span className="text-xs text-slate-500">Build planner & gear optimizer</span>
+          </div>
+        </div>
+        <div className="justify-self-end">
+          <span
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-rose-200 bg-white/70 backdrop-blur text-rose-700 text-xs font-semibold shadow-sm hover:shadow transition"
+            title="Vilkha — Server: Asia Ohn 01"
+          >
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-rose-500" />
+            <span className="font-bold">Vilkha</span>
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-rose-500" />
+            <span>
+              Server: <span className="font-semibold">Asia Ohn 01</span>
+            </span>
+          </span>
         </div>
       </header>
 
@@ -43,16 +63,20 @@ export default function App() {
         <StaticCard />
       </main>
 
-      <footer className="mt-2 flex items-center justify-between">
-        <div className="text-xs text-slate-500">
+      <footer className="mt-2 grid grid-cols-2 items-center">
+        <div className="text-xs text-slate-500 justify-self-start">
           Note: Colors are visual cues only and do not affect any calculation.
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 justify-self-end">
           <button
-            className="px-3 py-2 text-sm rounded border border-slate-300 text-slate-700 hover:bg-slate-50"
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-md text-white bg-gradient-to-r from-rose-600 to-red-600 shadow hover:shadow-md hover:from-rose-500 hover:to-red-500 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2 active:scale-[0.98] transition"
             onClick={() => setCalcOpen(true)}
+            title="Open Stat Calculator"
           >
-            Stat Calculator
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+              <path d="M7 2a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3H7zm0 2h10a1 1 0 0 1 1 1v3H6V5a1 1 0 0 1 1-1zm-1 6h12v9a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V10zm2 2h2v2H8v-2zm0 3h2v2H8v-2zm3-3h2v2h-2v-2zm0 3h2v2h-2v-2zm3-3h2v2h-2v-2zm0 3h2v2h-2v-2z" />
+            </svg>
+            <span>Stat Calculator</span>
           </button>
           <button
             className="px-3 py-2 text-sm rounded bg-slate-800 text-white hover:bg-slate-700"
