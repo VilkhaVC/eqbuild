@@ -79,9 +79,12 @@ export default function Toolbar() {
                 backgroundColor: on ? col : 'transparent',
                 color: on ? '#ffffff' : col,
               }}
-              title={`Toggle ${m}`}
+              title={`Toggle ${m}${m === 'PvP' ? ' (Default)' : ''}`}
             >
               {m}
+              {m === 'PvP' && !on && (
+                <span className="ml-1 text-[10px] opacity-60">★</span>
+              )}
             </button>
           )
         })}

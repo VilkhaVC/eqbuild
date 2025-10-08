@@ -151,7 +151,16 @@ export const useBuilderStore = create<BuilderState>()(
         set({ modes: next })
       },
       setClass: (klass) => set({ selectedClass: klass, selectedSubClass: undefined }),
-      setSubClass: (sub) => set({ selectedSubClass: sub }),
+      setSubClass: (sub) => {
+        const state = get()
+        // Jika memilih sub-class dan belum ada mode yang aktif, set PvP sebagai default
+        const hasActiveMode = Object.values(state.modes).some(active => active)
+        const nextModes = sub && !hasActiveMode 
+          ? { ...state.modes, PvP: true }
+          : state.modes
+        
+        set({ selectedSubClass: sub, modes: nextModes })
+      },
       applyRecommendation: (rec) => {
         const state = get()
         // Apply attributes: ON for recommended, OFF for others
