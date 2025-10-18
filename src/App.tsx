@@ -9,6 +9,7 @@ import { useBuilderStore } from './store/builder'
 import Modal from './components/Modal'
 import StatCalculator from './components/StatCalculator'
 import Maps from './components/Maps'
+import Skills from './components/Skills'
 
 const layout: Array<{ key: SlotKey; title: string }> = [
   { key: 'weapon', title: 'Weapon' },
@@ -22,12 +23,23 @@ const layout: Array<{ key: SlotKey; title: string }> = [
   { key: 'ring', title: 'Ring' },
 ]
 
-type PageKey = 'builder' | 'maps'
+type PageKey = 'builder' | 'maps' | 'skills'
 
 export default function App() {
   const { resetAll } = useBuilderStore()
   const [calcOpen, setCalcOpen] = React.useState(false)
   const [currentPage, setCurrentPage] = React.useState<PageKey>('builder')
+  const supportAddress = '0x35a464A2AD526191377Dea5B0D39dfAd275176C8'
+  const [copiedSupport, setCopiedSupport] = React.useState(false)
+  const truncateMiddle = (s: string) => (s.length <= 14 ? s : s.slice(0, 6) + '…' + s.slice(-4))
+  const handleCopySupport = async () => {
+    if (!supportAddress) return
+    try {
+      await navigator.clipboard.writeText(supportAddress)
+      setCopiedSupport(true)
+      setTimeout(() => setCopiedSupport(false), 1200)
+    } catch {}
+  }
   return (
     <div className="w-full max-w-screen-2xl mx-auto h-screen overflow-hidden px-2 py-2 flex flex-col gap-2">
       <header className="flex items-center justify-between">
@@ -37,10 +49,18 @@ export default function App() {
           </div>
           <div className="flex flex-col leading-tight">
             <h1 className="text-2xl font-extrabold bg-gradient-to-r from-slate-900 via-rose-700 to-red-600 bg-clip-text text-transparent tracking-tight">
-              {currentPage === 'builder' ? 'Rohan 2 EQ stats Build' : 'Rohan 2 Maps Explorer'}
+              {currentPage === 'builder'
+                ? 'Rohan 2 EQ stats Build'
+                : currentPage === 'maps'
+                  ? 'Rohan 2 Maps Explorer'
+                  : 'Rohan 2 Skills Planner'}
             </h1>
             <span className="text-xs text-slate-500">
-              {currentPage === 'builder' ? 'Build planner & gear optimizer' : 'Interactive map browser & monster guide'}
+              {currentPage === 'builder'
+                ? 'Build planner & gear optimizer'
+                : currentPage === 'maps'
+                  ? 'Interactive map browser & monster guide'
+                  : 'Plan & simulate class skills'}
             </span>
           </div>
           
@@ -66,9 +86,60 @@ export default function App() {
             >
               Maps
             </button>
+            <button
+              onClick={() => setCurrentPage('skills')}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                currentPage === 'skills'
+                  ? 'bg-rose-600 text-white shadow'
+                  : 'text-rose-600 hover:bg-rose-50 border border-rose-200'
+              }`}
+            >
+              Skills
+            </button>
+            <button
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-md text-white bg-gradient-to-r from-rose-600 to-red-600 shadow hover:shadow-md hover:from-rose-500 hover:to-red-500 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2 active:scale-[0.98] transition"
+              onClick={() => setCalcOpen(true)}
+              title="Open Stat Calculator"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                <path d="M7 2a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3H7zm0 2h10a1 1 0 0 1 1 1v3H6V5a1 1 0 0 1 1-1zm-1 6h12v9a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V10zm2 2h2v2H8v-2zm0 3h2v2H8v-2zm3-3h2v2h-2v-2zm0 3h2v2h-2v-2zm3-3h2v2h-2v-2zm0 3h2v2h-2v-2z" />
+              </svg>
+              <span>Stat Calculator</span>
+            </button>
           </div>
         </div>
-        <div className="justify-self-end">
+        <div className="flex items-center gap-2 justify-self-end">
+          {supportAddress && (
+            <button
+              onClick={handleCopySupport}
+              title="Copy Cross Wallet address"
+              className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-green-300 bg-green-50 backdrop-blur text-green-700 text-xs font-semibold shadow-sm hover:shadow hover:bg-green-100 transition ${copiedSupport ? 'ring-2 ring-green-400' : ''}`}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Support (Cross Wallet address)</span>
+              <span className="font-mono">{truncateMiddle(supportAddress)}</span>
+              <span
+                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-semibold transition-colors ${
+                  copiedSupport ? 'bg-emerald-100 border-emerald-300 text-emerald-700' : 'bg-slate-100 border-slate-300 text-slate-700'
+                }`}
+              >
+                {copiedSupport ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5">
+                    <path d="M20 6L9 17l-5-5" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                )}
+                <span>{copiedSupport ? 'Copied' : 'Copy'}</span>
+              </span>
+            </button>
+          )}
           <span
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-rose-200 bg-white/70 backdrop-blur text-rose-700 text-xs font-semibold shadow-sm hover:shadow transition"
             title="Vilkha — Server: Asia Ohn 01"
@@ -101,16 +172,6 @@ export default function App() {
             </div>
             <div className="flex items-center gap-2 justify-self-end">
               <button
-                className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-md text-white bg-gradient-to-r from-rose-600 to-red-600 shadow hover:shadow-md hover:from-rose-500 hover:to-red-500 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2 active:scale-[0.98] transition"
-                onClick={() => setCalcOpen(true)}
-                title="Open Stat Calculator"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                  <path d="M7 2a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3H7zm0 2h10a1 1 0 0 1 1 1v3H6V5a1 1 0 0 1 1-1zm-1 6h12v9a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V10zm2 2h2v2H8v-2zm0 3h2v2H8v-2zm3-3h2v2h-2v-2zm0 3h2v2h-2v-2zm3-3h2v2h-2v-2zm0 3h2v2h-2v-2z" />
-                </svg>
-                <span>Stat Calculator</span>
-              </button>
-              <button
                 className="px-3 py-2 text-sm rounded bg-slate-800 text-white hover:bg-slate-700"
                 onClick={resetAll}
               >
@@ -122,6 +183,7 @@ export default function App() {
       )}
 
       {currentPage === 'maps' && <Maps />}
+      {currentPage === 'skills' && <Skills />}
 
       <Modal open={calcOpen} onClose={() => setCalcOpen(false)} title="Stat Calculator" maxWidth="max-w-2xl">
         <StatCalculator />

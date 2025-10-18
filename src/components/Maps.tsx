@@ -3,7 +3,10 @@ import { mapsData, mapTypeColors, type MapInfo } from '../data/maps'
 import { mapMarkers } from '../data/map-markers'
 
 export default function Maps() {
-  const [selectedMap, setSelectedMap] = React.useState<MapInfo>(mapsData[0])
+  const [selectedMap, setSelectedMap] = React.useState<MapInfo>(() => {
+    const def = mapsData.find(m => m.id === 'del-lagos' || m.name === 'Del Lagos')
+    return def || mapsData[0]
+  })
   const [zoom, setZoom] = React.useState(1)
   const [pan, setPan] = React.useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = React.useState(false)
@@ -28,6 +31,16 @@ export default function Maps() {
   }, [])
   const bosses = React.useMemo(() => mapMarkers.filter(m => m.mapId === selectedMap.id && m.type === 'boss'), [selectedMap.id])
   const bossTitle = React.useMemo(() => bosses.length ? bosses.map(b => displayOnlyName(b.name)).join(', ') : null, [bosses, displayOnlyName])
+  
+  const mapsOrdered = React.useMemo(() => {
+    const arr = [...mapsData]
+    const idx = arr.findIndex(m => m.name === 'Field Dungeon')
+    if (idx >= 0) {
+      const [fd] = arr.splice(idx, 1)
+      arr.push(fd)
+    }
+    return arr
+  }, [])
 
   // Clamp pan agar gambar tidak keluar dari area container saat zoom
   const clampPan = (p: { x: number; y: number }, z: number = zoom) => {
@@ -287,7 +300,7 @@ export default function Maps() {
         
         <div className="flex-1 overflow-y-auto p-2">
           <div className="space-y-2">
-            {mapsData.map((map) => (
+            {mapsOrdered.map((map) => (
               <button
                 key={map.id}
                 onClick={() => setSelectedMap(map)}

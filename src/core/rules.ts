@@ -21,6 +21,29 @@ export const ClassToSubclasses: Record<string, string[]> = {
   Dekan: ['Dragon Sage', 'Dragon Knight'],
 }
 
+export const BaseSubclassByClass: Record<string, string> = {
+  Dekan: 'Dragon Fighter',
+  'Half Elf': 'Archer',
+  Elf: 'Healer',
+  Dhan: 'Assassin',
+  Human: 'Knight',
+}
+
+export function getAvailableSubclassesForLevel(classId: string, level: number): string[] {
+  if (classId === 'Dekan') {
+    if (level < 50) return [BaseSubclassByClass.Dekan]
+    return ClassToSubclasses.Dekan
+  }
+  return ClassToSubclasses[classId] || []
+}
+
+export function getEffectiveSubclass(classId: string, level: number, chosen?: string): string | undefined {
+  const av = getAvailableSubclassesForLevel(classId, level)
+  if (av.length === 0) return undefined
+  if (level < 50) return av[0]
+  return chosen && av.includes(chosen) ? chosen : av[0]
+}
+
 // Heuristik kategori berdasarkan nama stat (bisa disesuaikan bila ada koreksi)
 export function getStatCategory(label: string): Category {
   const l = label.toLowerCase()
